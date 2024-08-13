@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LandingPage = () => {
+const LandingPage2 = () => {
   return (
     <>
         
@@ -8,4 +8,4 @@ const LandingPage = () => {
   )
 }
 
-export default LandingPage
+export default LandingPage2
