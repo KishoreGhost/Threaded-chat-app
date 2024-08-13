@@ -1,1 +1,1 @@
-# Kurian-chat-app
+# Threaded-chat-app
