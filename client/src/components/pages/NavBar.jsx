@@ -1,27 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../../assets/Threaded_logov2.png";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
-      <nav className="flex flex-row justify-between items-center p-4 px-20 font-sans font-semibold border-2 border-solid border-t shadow-sm ">
-        <div>
-          <img className="w-40 h-8" src={Logo} alt="Logo" />
-        </div>
-        <div className="flex items-center justify-between w-1/3">
-          <ul className="text-lg cursor-pointer">Demo</ul>
-          <ul className="text-lg cursor-pointer">About</ul>
-          <ul className="text-lg cursor-pointer">Blog</ul>
-          <ul className="text-lg cursor-pointer">Pages</ul>
-          <ul className="text-lg cursor-pointer">Contact</ul>
-        </div>
-        <div className="flex items-center justify-between w-1/5 px-4">
-          <div>
-            <p className="text-lg cursor-pointer">Login</p>
+      <nav className="flex flex-col lg:flex-row justify-between items-center p-4 px-6 lg:px-20 font-sans font-semibold border-2 border-solid border-t shadow-sm">
+        <div className="flex justify-between items-center w-full lg:w-auto">
+          <img className="w-32 h-8" src={Logo} alt="Logo" />
+          <div className="lg:hidden">
+            <button onClick={toggleMenu}>
+              {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
           </div>
-          <div className="flex items-center justify-center">
-            <button className="border-2 text-white border-solid border-[#FB8E0B] rounded-md bg-[#FB8E0B] px-4 h-11">Get Started</button>
-          </div>
+        </div>
+
+        <div
+          className={`${
+            isOpen ? "block" : "hidden"
+          } lg:flex flex-col lg:flex-row items-center justify-center w-full lg:w-auto lg:flex-1`}
+        >
+          <ul className="flex flex-col lg:flex-row items-center lg:space-x-6">
+            <li className="text-lg cursor-pointer py-2 lg:py-0">Demo</li>
+            <li className="text-lg cursor-pointer py-2 lg:py-0">About</li>
+            <li className="text-lg cursor-pointer py-2 lg:py-0">Blog</li>
+            <li className="text-lg cursor-pointer py-2 lg:py-0">Pages</li>
+            <li className="text-lg cursor-pointer py-2 lg:py-0">Contact</li>
+          </ul>
+        </div>
+
+        <div
+          className={`${
+            isOpen ? "block" : "hidden"
+          } lg:flex flex-col lg:flex-row items-center lg:space-x-4 mt-4 lg:mt-0`}
+        >
+          <p className="text-lg cursor-pointer py-2 lg:py-0 text-center">Login</p>
+          <button className="border-2 text-white border-solid border-[#FB8E0B] rounded-md bg-[#FB8E0B] px-4 h-11 mt-2 lg:mt-0">
+            Get Started
+          </button>
         </div>
       </nav>
     </>
