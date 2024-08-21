@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Logo from "../../../assets/Threaded_logov2.png";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
 const NavBar = () => {
+  const { loginWithRedirect, isAuthenticated, logout } = useAuth0();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -40,11 +43,21 @@ const NavBar = () => {
           isOpen ? "block" : "hidden"
         } lg:flex flex-col lg:flex-row items-center lg:space-x-4 mt-4 lg:mt-0`}
       >
-        <Link to="/login">
-          <p className="text-lg cursor-pointer py-2 lg:py-0 text-center">
+        {!isAuthenticated ? (
+          <p
+            className="text-lg cursor-pointer py-2 lg:py-0 text-center"
+            onClick={() => loginWithRedirect()}
+          >
             Login
           </p>
-        </Link>
+        ) : (
+          <p
+            className="text-lg cursor-pointer py-2 lg:py-0 text-center"
+            onClick={() => logout({ returnTo: window.location.origin })}
+          >
+            Logout
+          </p>
+        )}
         <button className="border-2 text-white border-solid border-[#FB8E0B] rounded-md bg-[#FB8E0B] px-4 h-11 mt-2 lg:mt-0">
           Get Started
         </button>
