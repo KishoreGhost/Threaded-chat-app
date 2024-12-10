@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <footer className="bg-pink-200">
+        <footer className="">
           <div className="flex items-center justify-between p-10">
             <div>
               <img src={Logo} alt="" />
