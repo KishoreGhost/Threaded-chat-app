@@ -70,7 +70,7 @@ const LandingPage2 = () => {
         <div>
           <img src={LandPageImg2} alt="" />
         </div>
-        <div className="p-9 mx-4 flex flex-col items-start justify-between border-2 border-solid border-amber-200 w-[45%] max-h-[60vh] ">
+        <div className="p-9 mx-4 flex flex-col items-start justify-between   w-[45%] max-h-[60vh] ">
           <h2 className="font-bold text-4xl mb-10">
             Meet your Peers, with <br />
             live video chat
