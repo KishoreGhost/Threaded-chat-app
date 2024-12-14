@@ -1,0 +1,14 @@
+services:
+  - name: chat-app-backend
+    type: web
+    env: node
+    buildCommand: npm run build
+    startCommand: node backend/server.js
+    envVars:
+      MONGO_URI: ${MONGO_URI}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      PORT: 5000
+  - name: chat-app-frontend
+    type: web
+    env: static
+    staticPublishPath: frontend/build
