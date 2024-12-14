@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const http = require('http');
 const initializeSocket = require('./socket');
+const connectDB = require('./config/db');
+connectDB();
 
 dotenv.config();
 
