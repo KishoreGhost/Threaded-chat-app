@@ -1,20 +1,21 @@
 const crypto = require('crypto');
 
-const ALGORITHM = 'aes-256-ctr';
-const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
-const IV_LENGTH = 16; // Initialization vector length
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
+const IV_LENGTH = 16;
 
 const encrypt = (text) => {
   const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv);
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-  return iv.toString('hex') + ':' + encrypted.toString('hex');
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
 };
 
-const decrypt = (encryptedText) => {
-  const [iv, encrypted] = encryptedText.split(':');
-  const decipher = crypto.createDecipheriv(ALGORITHM, SECRET_KEY, Buffer.from(iv, 'hex'));
-  const decrypted = Buffer.concat([decipher.update(Buffer.from(encrypted, 'hex')), decipher.final()]);
+const decrypt = (text) => {
+  const [iv, encryptedText] = text.split(':');
+  const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), Buffer.from(iv, 'hex'));
+  let decrypted = decipher.update(Buffer.from(encryptedText, 'hex'));
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
 };
 
