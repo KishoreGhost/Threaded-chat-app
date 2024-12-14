@@ -25,6 +25,15 @@ const ChatInterface = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+    if (e.target.value) {
+      socket.emit('userTyping');
+    } else {
+      socket.emit('userStoppedTyping');
+    }
+  };
+
   return (
     <div>
       <div>
@@ -37,9 +46,9 @@ const ChatInterface = () => {
       <input
         type="text"
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Type your message..."
-      />
+    />
       <button onClick={sendMessage}>Send</button>
     </div>
   );
