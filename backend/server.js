@@ -1,30 +1,17 @@
-const express = require('express')
-const { Socket } = require('socket.io')
-const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
-const { v4: uuidV4 } = require('uuid')
+const express = require('express');
+const dotenv = require('dotenv');
 
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
+dotenv.config();
 
-app.get('/', (req,res) =>{
-  res.redirect(`/${uuidV4()}`)
-})
+const app = express();
+app.use(express.json());
 
-app.get('/:room', (req,res)=> {
-  res.render('room', { roomId: req.params.room})
-})
+app.get('/', (req, res) => {
+  res.send('Chat App Backend Initialized!');
+});
 
-io.on('connection', socket=>{
-  socket.on('join-room', (roomId, userId)=>{
-    socket.join(roomId)
-    socket.to(roomId).emit('user-connected', userId);
+const PORT = process.env.PORT || 5000;
 
-    socket.on('disconnect',()=>{
-      socket.to(roomId).emit('user-disconnected', userId);
-    })
-  })
-})
-
-server.listen(3000)
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
