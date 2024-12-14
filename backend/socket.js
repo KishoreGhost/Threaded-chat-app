@@ -5,6 +5,26 @@ const handleWebRTCSignaling = require("./controllers/webrtcController");
 io.on("connection", (socket) => {
   handleWebRTCSignaling(socket);
 });
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
+
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (isValidToken(token)) {
+    return next();
+  }
+  return next(new Error('Authentication error'));
+});
+
+function isValidToken(token) {
+  // Mock validation for JWT tokens
+  return token === process.env.VALID_SOCKET_TOKEN;
+}
+
 
 const initializeSocket = (server) => {
   const io = new Server(server, {
