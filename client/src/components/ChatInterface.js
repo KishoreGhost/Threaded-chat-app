@@ -3,55 +3,27 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:5000');
 
+import ChatRooms from './ChatRooms';
+
 const ChatInterface = () => {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [currentRoom, setCurrentRoom] = useState('general');
+  const [rooms] = useState(['general', 'sports', 'technology']);
 
   useEffect(() => {
-    socket.on('receiveMessage', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    socket.emit('joinRoom', currentRoom);
 
-    return () => {
-      socket.off('receiveMessage');
-    };
-  }, []);
+    socket.on('chatHistory', (history) => setMessages(history));
 
-  const sendMessage = () => {
-    if (input.trim()) {
-      socket.emit('sendMessage', input);
-      setMessages((prevMessages) => [...prevMessages, { content: input, sender: 'You' }]);
-      setInput('');
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-    if (e.target.value) {
-      socket.emit('userTyping');
-    } else {
-      socket.emit('userStoppedTyping');
-    }
-  };
+    return () => socket.emit('leaveRoom', currentRoom);
+  }, [currentRoom]);
 
   return (
     <div>
-      <div>
-        {messages.map((msg, index) => (
-          <p key={index}>
-            <strong>{msg.sender}:</strong> {msg.content}
-          </p>
-        ))}
-      </div>
-      <input
-        type="text"
-        value={input}
-        onChange={handleInputChange}
-        placeholder="Type your message..."
-    />
-      <button onClick={sendMessage}>Send</button>
+      <ChatRooms rooms={rooms} currentRoom={currentRoom} setCurrentRoom={setCurrentRoom} />
+      {/* Rest of the component */}
     </div>
   );
 };
+
 
 export default ChatInterface;
