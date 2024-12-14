@@ -1,36 +1,33 @@
 import React, { useRef, useEffect } from 'react';
 
 const VideoCall = () => {
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-  let peerConnection;
-
-  useEffect(() => {
-    const startCall = async () => {
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      localVideoRef.current.srcObject = localStream;
-
-      peerConnection = new RTCPeerConnection();
-      localStream.getTracks().forEach((track) => peerConnection.addTrack(track, localStream));
-
-      peerConnection.ontrack = (event) => {
-        remoteVideoRef.current.srcObject = event.streams[0];
+    const localVideoRef = useRef(null);
+    let localStream;
+  
+    useEffect(() => {
+      const startCall = async () => {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localVideoRef.current.srcObject = localStream;
       };
-
-      // For testing, create a mock connection
-      const offer = await peerConnection.createOffer();
-      await peerConnection.setLocalDescription(offer);
+  
+      startCall();
+    }, []);
+  
+    const toggleVideo = () => {
+      localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled;
     };
-
-    startCall();
-  }, []);
-
-  return (
-    <div>
-      <video ref={localVideoRef} autoPlay muted />
-      <video ref={remoteVideoRef} autoPlay />
-    </div>
-  );
-};
+  
+    const toggleAudio = () => {
+      localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
+    };
+  
+    return (
+      <div>
+        <video ref={localVideoRef} autoPlay muted />
+        <CallControls onToggleVideo={toggleVideo} onToggleAudio={toggleAudio} />
+      </div>
+    );
+  };
+  
 
 export default VideoCall;
